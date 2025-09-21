@@ -12,6 +12,7 @@
 /build/
 /dist/
 /config/
+/logs/app.log
 
 # Dependency directories (vendor)
 vendor/
