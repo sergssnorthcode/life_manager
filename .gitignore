@@ -1,0 +1,26 @@
+# .gitignore
+# Binaries
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+
+# Output folders
+/bin/
+/build/
+/dist/
+/config/
+
+# Dependency directories (vendor)
+vendor/
+
+# IDE/editor files
+.vscode/
+.idea/
+*.swp
+
+# OS files
+.DS_Store
+Thumbs.db
