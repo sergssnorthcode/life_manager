@@ -11,7 +11,8 @@
 /bin/
 /build/
 /dist/
-/config/
+/config/config.dev.json
+/config/config.prod.json
 /logs/app.log
 
 # Dependency directories (vendor)
