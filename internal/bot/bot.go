@@ -42,7 +42,23 @@ func (tg *TelegramBot) GetUpdates() {
 				)
 				tg.bot.Send(msg)
 			case "Запустить таймер ⏰":
+				options := []struct {
+					text string
+					data string
+				}{
+					{"30 минут", "timer_30_min"},
+					{"45 минут", "timer_45_min"},
+					{"1 час", "timer_60_min"},
+					{"1,5 часа", "timer_90_min"},
+					{"2 часа", "timer_120_min"},
+				}
 				msg := tgbotapi.NewMessage(update.Message.Chat.ID, "Выберите время")
+				var inlineKeyboardRows [][]tgbotapi.InlineKeyboardButton
+				for _, option := range options {
+					inlineKeyboardRows = append(inlineKeyboardRows, tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(option.text, option.data)))
+				}
+				msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(inlineKeyboardRows...)
+
 				msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
 					tgbotapi.NewInlineKeyboardRow(
 						tgbotapi.NewInlineKeyboardButtonData("30 минут", "timer_30_min"),
@@ -54,10 +70,13 @@ func (tg *TelegramBot) GetUpdates() {
 						tgbotapi.NewInlineKeyboardButtonData("60 минут", "timer_60_min"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("2 часа", "timer_120_min"),
+						tgbotapi.NewInlineKeyboardButtonData("1 час", "timer_60_min"),
 					),
 					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("2 часа", "timer_30_sec"),
+						tgbotapi.NewInlineKeyboardButtonData("1,5 часа", "timer_60_min"),
+					),
+					tgbotapi.NewInlineKeyboardRow(
+						tgbotapi.NewInlineKeyboardButtonData("2 часа", "timer_60_min"),
 					),
 				)
 				tg.bot.Send(msg)
