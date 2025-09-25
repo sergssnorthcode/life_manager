@@ -58,41 +58,21 @@ func (tg *TelegramBot) GetUpdates() {
 					inlineKeyboardRows = append(inlineKeyboardRows, tgbotapi.NewInlineKeyboardRow(tgbotapi.NewInlineKeyboardButtonData(option.text, option.data)))
 				}
 				msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(inlineKeyboardRows...)
-
-				msg.ReplyMarkup = tgbotapi.NewInlineKeyboardMarkup(
-					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("30 минут", "timer_30_min"),
-					),
-					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("45 минут", "timer_45_min"),
-					),
-					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("60 минут", "timer_60_min"),
-					),
-					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("1 час", "timer_60_min"),
-					),
-					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("1,5 часа", "timer_60_min"),
-					),
-					tgbotapi.NewInlineKeyboardRow(
-						tgbotapi.NewInlineKeyboardButtonData("2 часа", "timer_60_min"),
-					),
-				)
 				tg.bot.Send(msg)
 			}
 
 		}
 
 		if update.CallbackQuery != nil {
-			switch update.CallbackQuery.Data {
-			case "timer_30_min":
-				duration := 30 * time.Second
+			dataToDuration := map[string]time.Duration{
+				"timer_30_min":  30 * time.Minute,
+				"timer_45_min":  45 * time.Minute,
+				"timer_60_min":  60 * time.Minute,
+				"timer_90_min":  90 * time.Minute,
+				"timer_120_min": 120 * time.Minute,
+			}
+			if duration, ok := dataToDuration[update.CallbackQuery.Data]; ok {
 				timer.StartTimer(tg.bot, update.CallbackQuery.Message.Chat.ID, duration)
-			case "timer_30_sec":
-				duration := 30 * time.Second
-				timer.StartTimer(tg.bot, update.CallbackQuery.Message.Chat.ID, duration)
-
 			}
 		}
 	}
