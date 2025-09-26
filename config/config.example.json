@@ -1,3 +1,4 @@
 {
-  "TelegramBotToken": "TOKEN"
+  "TelegramBotToken": "TOKEN",
+  "DbUrl": "URL"
 }

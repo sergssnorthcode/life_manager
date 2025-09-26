@@ -3,7 +3,7 @@ package timer
 import (
 	"time"
 
-	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
+	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
 )
 
 func StartTimer(bot *tgbotapi.BotAPI, chatID int64, duration time.Duration) {

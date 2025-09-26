@@ -8,6 +8,7 @@ import (
 
 type Config struct {
 	TelegramBotToken string
+	DbUrl            string
 }
 
 //config.dev.json
