@@ -6,11 +6,14 @@ import (
 	"time"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api/v5"
+	"github.com/jackc/pgx/v5/pgxpool"
+	"github.com/sergssnorth27/life_manager/internal/storage"
 	"github.com/sergssnorth27/life_manager/internal/timer"
 )
 
 type TelegramBot struct {
 	bot        *tgbotapi.BotAPI
+	DB         *pgxpool.Pool
 	userStates map[int64]string
 	tasks      map[int64][]Task
 }
@@ -20,7 +23,7 @@ type Task struct {
 	text string
 }
 
-func (tg *TelegramBot) LoadBot(token string) error {
+func (tg *TelegramBot) LoadBot(token string, db *pgxpool.Pool) error {
 	bot, err := tgbotapi.NewBotAPI(token)
 	if err != nil {
 		log.Printf("Не удалось создать бота: %v", err)
@@ -28,6 +31,7 @@ func (tg *TelegramBot) LoadBot(token string) error {
 	}
 	bot.Debug = true
 	tg.bot = bot
+	tg.DB = db
 	tg.userStates = make(map[int64]string)
 	tg.tasks = make(map[int64][]Task)
 	return nil
@@ -55,6 +59,16 @@ func (tg *TelegramBot) GetUpdates() {
 
 			switch update.Message.Text {
 			case "/start":
+				user, err := storage.GetUser(tg.DB, update.Message.From.ID)
+				if err != nil {
+					log.Printf("Ошибка при получении пользователя, %v", err)
+				}
+				if user == nil {
+					_, _, err := storage.CreateUser(tg.DB, update.Message.From.ID, update.Message.From.UserName, update.Message.From.FirstName, update.Message.From.LastName)
+					if err != nil {
+						log.Printf("Ошибка при создании пользователя, %v", err)
+					}
+				}
 				msg := tgbotapi.NewMessage(chatId, "Привет 👋🏻")
 				msg.ReplyMarkup = tgbotapi.NewReplyKeyboard(
 					tgbotapi.NewKeyboardButtonRow(

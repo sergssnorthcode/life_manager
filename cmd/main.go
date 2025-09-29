@@ -27,7 +27,7 @@ func main() {
 
 	var bot bot.TelegramBot
 
-	err = bot.LoadBot(conf.TelegramBotToken)
+	err = bot.LoadBot(conf.TelegramBotToken, db)
 	if err != nil {
 		log.Printf("Ошибка загрузки бота: %v", err)
 	}

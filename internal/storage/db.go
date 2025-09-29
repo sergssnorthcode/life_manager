@@ -14,7 +14,7 @@ func NewDB(dbURL string) (*pgxpool.Pool, error) {
 
 	pool, err := pgxpool.New(ctx, dbURL)
 	if err != nil {
-		return nil, fmt.Errorf("Ошибка подключения к БД: %w", err)
+		return nil, fmt.Errorf("ошибка подключения к БД: %w", err)
 	}
 
 	// простая проверка подключения
